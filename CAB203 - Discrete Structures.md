@@ -1976,21 +1976,21 @@ def N(G, u):
 	return { v for v in V if (u,v) in E }
 
 def NS(V, E, S):
-    return { v for v in V for u in S if (u,v) in E }
+	return { v for v in V for u in S if (u,v) in E }
 
 def distanceClasses(V, E, u):
-    V0 = V
-    D = [ { u } ]
-    return distanceClassesR(V0, E, D)
+	V0 = V
+	D = [ { u } ]
+	return distanceClassesR(V0, E, D)
 
 def distanceClassesR(V, E, D):
-    Vnew = V - D[-1]
+	Vnew = V - D[-1]
 
-    if len(Vnew) == 0:
-        return D
+	if len(Vnew) == 0:
+			return D
 
-    Dnew = D + [ NS(Vnew, E, D[-1]) ]
-    return distanceClassesR(Vnew, E, Dnew)
+	Dnew = D + [ NS(Vnew, E, D[-1]) ]
+	return distanceClassesR(Vnew, E, Dnew)
 
 print(distanceClasses(V, E, 1))
 ```
@@ -2022,19 +2022,19 @@ E = { (1, 2), (2,1), (2,3), (3,2), (3,1), (1,3), (1,4), (4,1), (4,5), (5,4) }
 G = (V, E)
 
 def NS(V, E, S):
-    return { v for v in V for u in S if (u,v) in E }
+	return { v for v in V for u in S if (u,v) in E }
     
 def BFS(V, E, u):
-    D = {u}
-    BFSR(V, E, D)
+	D = {u}
+	BFSR(V, E, D)
 
 def BFSR(V, E, D):
-    for v in D:
-        print(v)
-    Vnew = V - D
-    if len(Vnew) == 0: return 
-    Dnew = NS(Vnew, E, D)
-    BFSR(Vnew, E, Dnew) 
+	for v in D:
+			print(v)
+	Vnew = V - D
+	if len(Vnew) == 0: return 
+	Dnew = NS(Vnew, E, D)
+	BFSR(Vnew, E, Dnew) 
 ```
 
 ### Depth First Traversal
@@ -2050,17 +2050,17 @@ def N(G, u):
 	return { v for v in V if (u,v) in E }
     
 def depthFirst(V, E, u):
-    T = {u}                               # Set of vertices already seen
-    depthFirstR(V, E, u, T)
+	T = {u}                               # Set of vertices already seen
+	depthFirstR(V, E, u, T)
 
 def depthFirstR(V, E, u, T):
-		print(u)                              # Process vertex u
-    if len(T) == len(V): return T         # Check if we've seen all vertices
-    Nu = N((V, E), u) - T                 # Neighbours not already seen
-    T.update(Nu)                          # Update set of vertices already seen
-    for v in Nu:
-	    T.update(depthFirstR(V, E, v, T))   # Add vertices seen
-		return T                    
+	print(u)                              # Process vertex u
+	if len(T) == len(V): return T         # Check if we've seen all vertices
+	Nu = N((V, E), u) - T                 # Neighbours not already seen
+	T.update(Nu)                          # Update set of vertices already seen
+	for v in Nu:
+		T.update(depthFirstR(V, E, v, T))   # Add vertices seen
+	return T                    
 ```
 
 <br>
@@ -2156,4 +2156,58 @@ As well as sub-graphs we also have sub-trees. If we have a rooted tree, we can t
 We can identify trees inside of graphs.
 - A sub-graph $T = (V,E')$ of a connected graph $G = (V, E)$ which is also a tree is called a spanning tree.
 - If the graph has a spanning tree then we know it must also be connected. This means that the spanning tree gives a unique path between any two vertices in $G$
+
+### BFS
+
+```python
+# Code referenced from Week 8 Topic 2
+
+def NS(V, E, S):
+	return { v for u in S for v in V if (u, v) in E }
+
+def N(V, E, u):
+	return { v for v in V if (u, v) in E }
+
+# @brief Helper method to get the next item in a set
+#
+# @param S Set of items
+# @returns the next item in the set
+def arbitrary(S):
+	return next(iter(S))
+
+# @brief Function to return the parent of each vertex 
+# 
+# @param V A graph
+# @param E Set of edges
+# @param r The root
+# @returns parents A set of all found parents
+def spanTree(V, E, r):
+	parents = { r: None }
+	spanTreeR(V - {r}, E, {r}, parents)
+	return parents
+
+# @brief Recursive version of the function `spanTree`
+#
+# @param V A sub-graph
+# @param E Set of edges
+# @param D The previous distance class
+# @param parents The parents of all found vertices
+def spanTreeR(V, E, D, parents):
+	Dnew = NS(V, E, D)
+	if not Dnew: return
+	for v in Dnew:
+		parents[v] = arbitrary(N(D, E, v))
+	spanTreeR(V - Dnew, E, Dnew, parents)
+```
+
+### Parents to Paths
+
+```python
+# Code referenced from Week 8 Topic 2
+
+def path(parents, v):
+	u = parents[v]
+	if u == None: return [v]
+	return path(parents, u) + [v]
+```
 
