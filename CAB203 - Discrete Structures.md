@@ -15,7 +15,7 @@ Dr Matthew McKague | Notes for CAB203 at the Queensland University of Technology
 		<li><a href="#week6">Week 6</a>: Relations and Functions</li>
 		<li><a href="#week7">Week 7</a>: Graphs</li>
 		<li><a href="#week8">Week 8</a>: Trees</li>
-		<li><a href="#week9">Week 9</a>: </li>
+		<li><a href="#week9">Week 9</a>: Directed Graphs</li>
 		<li><a href="#week10">Week 10</a>: </li>
 		<li><a href="#week11">Week 11</a>: </li>
 		<li><a href="#week12">Week 12</a>: </li>
@@ -1682,7 +1682,7 @@ $$
 $$
 
 ### Equivalence Relations
-An equivalence relation $R \subseteq A \times A$ separates a set into equivalence classes. These are subsets of $A$ that are all related by the relation. For example, the equivalence relation given by $a \equiv b \pmod{2}$ gives two equivalence classes, the even and odd numbers.
+An equivalence relation is a relation $R$ over a set that is symmetric, reflexive and transitive. An equivalence relation $R \subseteq A \times A$ separates a set into equivalence classes. These are subsets of $A$ that are all related by the relation. For example, the equivalence relation given by $a \equiv b \pmod{2}$ gives two equivalence classes, the even and odd numbers.
 
 ### Partial Ordering
 A partial ordering on a set $A$ is a binary relation over $A$ which is:
@@ -1868,11 +1868,11 @@ The graph described above is called a loop-free undirected graph which refers to
 We generally visualise graphs as a set of points (vertices) connect by lines (edges). The arrangement of the vertices doesn't matter and can be chosen arbitrarily.
 
 ```dot {engine='neato'}
-digraph G {
-	B -> C
-	C -> D
-	C -> A
-	A -> D
+graph {
+	B -- C
+	C -- D
+	C -- A
+	A -- D
 }
 ```
 
@@ -1883,9 +1883,9 @@ $$
 $$
 
 ```dot {engine='neato'}
-digraph G {
-	1 -> 2
-	2 -> 3
+graph {
+	1 -- 2
+	2 -- 3
 }
 ```
 
@@ -1950,9 +1950,11 @@ A cycle is similar to a path however we start and end at the same place. This is
 If there exists a path from $u$ to $v$ for every $u,v \in V$, then we can say that $G$ is connected. If this is false then we can say that $G$ is disconnected. We can also say that, if for every $u,v \in S \subseteq V$ there exists a path between $u$ and $v$ and there are no paths to any vertices outside of $S$, then $S$ is called a connected component of $G$.
 
 ### Distance
-Finally we can say the distance between vertices $u$ and $v$ is the length of the shortest path from $u$ to $v$
+We can say that the distance between vertices $u$ and $v$ is the length of the shortest path from $u$ to $v$
 
 ### Calculating Distances
+We can then calculate the distance by first fixing vertex $u$ in $V$. We can then define $D_j$ as the set of vertices that are of distance $j$ from $u$ and $V_j$ as the set of vertices that are of at least $j$ distance from $u$.
+
 $$
 	\begin{align*}
 		V_{j} &= \begin{cases}
@@ -1965,6 +1967,31 @@ $$
 		\end{cases} \\[5pt]
 	\end{align*}
 $$
+
+For example:
+
+```dot {engine="dot"} 
+graph {
+	A -- F
+	B -- C, D, E, F
+	C -- D, F
+}
+```
+
+$$
+	\begin{align*}
+	&D_{0}(A) \\ 
+	&V_{0} = V = \{A, B, C, D, E, F\} \\ 
+	&V_{1} = \{B, C, D, E, F\} \\[10pt]
+	&D_{1}(F) \\
+	&V_{2} = \{B, C, D, E\} \\[10pt]
+	&D_{2}(B, C) \\
+	&V_{3} = \{D, E\} \\[10pt]
+	&D_{3}(D, E) \\
+	\end{align*}
+$$
+
+### Calculating Distance in Python
 
 ```python
 V = { 1, 2, 3, 4, 5 }
@@ -2211,3 +2238,130 @@ def path(parents, v):
 	return path(parents, u) + [v]
 ```
 
+<br>
+
+<h2 id="week9">Week 9: Directed Graphs</h2>
+
+### Directed Graphs
+A directed graph is a graph were all edges have a direction tied to them. Directed graphs have an irreflexive relation as a node cannot be connected to itself. A directed graph is defined as $G = (V, E)$ where $E \subseteq V \times V$ and $\forall{v} \in V \ (v,v) \notin E$. Due to directed graphs containing a directional attribute we are allow to include both $(u,v)$ and $(v,u)$ as these are now counted as two separate edges.
+
+Here is an example of a directed graph:
+
+```dot {engine="dot"}
+digraph {
+	A -> B -> D
+	C -> A
+	D -> B
+	E -> B
+}
+```
+
+### Directed Cycles
+Much like how our graphs have cycles, our directed graphs have directed cycles. For example, A,B,C,D,A is a directed cycle while A,B,C is just a cycle:
+
+```dot {engine="circo"}
+digraph {
+	A -> B, C
+	B -> C
+	C -> D
+	D -> A
+}
+```
+
+### DAG
+A DAG, or Directed Acyclic Graph, is a directed graph which has no directed cycles. Here is an example:
+
+```dot {engine="dot"}
+digraph {
+	A -> B, C
+	B -> D
+	C -> B, E, D
+	E -> D
+}	
+```
+
+### Topological Ordering
+Topological ordering is a total ordering $R$ on all the vertices of a directed graph $(V, E,)$ where if there exists $(u,v) \in E$ then $uRv$. That is to say, a topological ordering is a total ordering $R$ on all vertices where $E \subseteq R$.
+
+It's important to remember that not every directed graph allows for topological ordering. For example, imagine we have a graph as such:
+
+```dot {engine="circo"}
+digraph {
+ A -> B
+ B -> C
+ C -> A
+}
+```
+
+Due to topological orderings being a total orderings we must have the quality of transitivity ($\forall{a,b,c} \in A \ (aRb \land bRc) \rightarrow aRc$). In the above graph we can see we have $aRb$ and $bRc$ however we don't have $aRc$, instead we have $cRa$. 
+
+This relationship breaks our anti-symmetric relationship therefore no longer being a total ordering and by consequence a topological ordering. To allow for a topological ordering our directed graphs must not contain any directed cycles, that is to say that our directed graph is not acyclic.
+
+### Weighted Graphs
+Sometimes when using graphs there's information we'd like to capture that just isn't possible by using graphs alone. We can add additional information to a graph by using weights. In the context of edges, an example of adding weight to an edge may be giving it a label. We can do this by defining some function $w : E \rightarrow \mathbb{R}$ ($\mathbb{R}$ can be replaced with other things like $\mathbb{Z}$, $\mathbb{N}$ or even another co-domain) where $E$ is our edge and $\mathbb{R}$ references the value associated with the edge. We can then say that for $e \in E$, the weight of $e$ is $w(e)$.
+
+### Flows
+A flow network is a directional graph where each edge has a capacity (weight) $c_e$ and a flow $f_e$. Each flow in the network contains a source and a drain and is bound by 3 constraints. The first constraint states that there exists no flow into the source and no flow out of the drain. The second constraint states that the flow on each edge cannot be a negative and must be less than the edges capacity. The third constraint states that, excluding the source and drain, the flow value going into a vertex must be equal to the flow value going out of that vertex.
+
+We can mathematically state the source of a flow as a function $f: E \rightarrow \mathbb{R}$ where $s \in V$ represents the source and $d \in D$ represents the drain. We can then state our 3 constraints as:
+1. $$\forall{(u,s)} \in E \ f((u,s)) = 0 \\ \forall{(d,u)} \in E \ f((d,u)) = 0$$
+2. $\forall{e} \in E$ 
+$$
+	0 \le f(e) \le c(e)
+$$
+3. $\forall{v} \in V \setminus \{s,d\}$ 
+$$
+	\sum_{(u,v) \in E} f((u,v)) = \sum_{(v,u) \in E} f((v,u))
+$$
+Where $(u,v) \in E$ represents the edges going into some vertex $v$ and $(v,u) \in E$ represents the edges going out of some vertex $v$.
+
+### Maximum Flows
+So now that we know what a flow is we can start finding out some information about it. For example, what happens if we want to find the maximum flow in our flow network? 
+
+We first define the value of a flow by the sum of flows coming out of the source:
+
+$$
+	\sum_{(s,u) \in E} f((s,u))
+$$
+
+And due to the conservation of flows the above is equal to the sum of flows into the drain:
+
+$$
+	\sum_{(u,d) \in E} f((u,d))
+$$
+
+The maximum flow problem on a weighted graph is to find the flow with the highest flow value.
+
+### Augmenting Paths
+Given a flow network $G=(V,E)$ where the capacities (weights) are represented as $c$ and a flow is represented as $f$. An augmenting path is a sequence of vertices $$s=v_{1},v_{2},...,v_{n}=d$$ where no vertex repeats, such that:
+- For each $j=1...n-1$, either $(v_{j},v_{j+1}) \in E$ (the next vertex is in $E$) or $(v_{j+1}, v_{j}) \in E$ (the previous vertex is in $E$).
+- If $e = (v_{j},v_{j+1}) \in E$ then $a(e) := c(e) - f(e) > 0$
+- If $e = (v_{j+1},v_{j}) \in E$ then $a(e) := f(e) > 0$
+
+It can then be said that the capacity of an augmenting path is the minimum $a(e)$ among all $e$ in the path. 
+
+So how do we actually find an augmenting path? We can find one by first building a new graph $(V, E')$ where $(u,v) \in E'$ if either:
+- $(u,v) \in E$ and $f((u,v)) < c((u,v))$
+- $(v,u) \in E$ and $f((v,u) \gt 0)$
+
+### Using Augmenting Paths
+Now that we have a flow $f$ and an augmenting path with a capacity of $a$ we can create a new flow $g$ with a higher value using the recusive definition below.
+
+$$
+g((u,v)) :=
+	\begin{cases}
+		f((u,v)) + a &: \textrm{the path goes forwards along}  (u,v) \\
+		f((u,v)) - a &: \textrm{the path goes backwards along}  (u,v) \\
+		f((u,v)) &: \textrm{otherwise}
+	\end{cases}
+$$
+
+If there exists no augmenting path then we know that the flow is maximum. We can also say that $f(e)=0$ is always a valid flow and can be used as a starting point.
+
+
+### Ford-Fulkerson Method 
+The Ford-Fulkerson method is a method to finding all maximum flows in a flow network. Informally we can unpack the recursive definition down to:
+1. Assign all the edges the value of $f(e)=0$
+2. Find a valid augmenting path. If none exist, then return $f$
+3. Update $f$ according to the found augmenting path
+4. Go back to step 2 and repeat
