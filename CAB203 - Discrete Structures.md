@@ -16,7 +16,7 @@ Dr Matthew McKague | Notes for CAB203 at the Queensland University of Technology
 		<li><a href="#week7">Week 7</a>: Graphs</li>
 		<li><a href="#week8">Week 8</a>: Trees</li>
 		<li><a href="#week9">Week 9</a>: Directed Graphs</li>
-		<li><a href="#week10">Week 10</a>: </li>
+		<li><a href="#week10">Week 10</a>: Finite State Automata</li>
 		<li><a href="#week11">Week 11</a>: </li>
 		<li><a href="#week12">Week 12</a>: </li>
 		<li><a href="#week13">Week 13</a>: </li>
@@ -1110,7 +1110,7 @@ Some mathematical sets have already been defined for us an we can use them to he
 - $\mathbb{N}$: A set of natural numbers
 - $\mathbb{R}$: A set of real numbers (decimals)
 - $\mathbb{Q}$: A set of rational numbers (fractions)
-- $\varnothing$: An empty set
+- $\emptyset$: An empty set
 
 There are a few ways we can define a set. The first way is to define the set by listing all its elements:
 
@@ -1167,7 +1167,7 @@ $$A \subset B \equiv A \subseteq B \land A \ne B$$
 
 Finally, a set containing all subsets of another set, $S$, is called the power set and is written as such that $P(S)$.
 
-$$P(\{1, 2\}) = \{\varnothing, \{1\}, \{2\}, \{1,2\}\}$$
+$$P(\{1, 2\}) = \{\emptyset, \{1\}, \{2\}, \{1,2\}\}$$
 
 Referring back to earlier when we looked at set equality, we can no re-define our definition and say $S = T$ when:
 - $S \subseteq T$
@@ -1269,20 +1269,20 @@ set() # empty set
 ### The Zermelo-Fraenkel Set Theory
 The Zermelo-Fraenkel set theory is a set of nine axioms, although we'll only look at seven, created by two mathematicians, Ernst Zermelo and Abraham Fraenkel. The seven axioms in this set theory define to us how sets should behave. We will take a look at this informally for now as the math behind it contains things we haven't learnt yet.
 1. Axiom of extensionality: If two sets contain the same elements then they are equal to each other.
-2. Axiom of regularity: For every non-empty set $S$, $S$ must contain at least one element $y$ such that $S$ and $y$ are disjoint. That is to say, sets cannot have membership to themselves (be a member of themselves) and cannot be empty as there is only one empty set $\varnothing$.
+2. Axiom of regularity: For every non-empty set $S$, $S$ must contain at least one element $y$ such that $S$ and $y$ are disjoint. That is to say, sets cannot have membership to themselves (be a member of themselves) and cannot be empty as there is only one empty set $\emptyset$.
 3. Axiom schema of specification: If we have a set, $S$, and a formula, $\phi(x)$, then there exists a subset that contains exactly all elements of $S$ satisfying $\phi(x)$ ($\{x \in S : \phi(x)\}$).
 4. Axiom of pairing: Given sets $S_{1}, S_{2}, ...$, then there exists a set $T$ such that $S_{1}, ..., S_{n} \in T$. That is to say, if $S_{1}, S_{2}, ...$ are sets, then there exists another set containing all elements of every $S_{j}$.
 5. Axiom schema of replacement: If we have a set, $S$, and $f(x)$ is a function on $S$, then there exists a subset that contains $f(x)$ for every $x \in S$ ($\{f(x) : x \in S\}$).
-6. Axiom of infinity: If we have a set, $S$, and $\varnothing \in S$ with $S_{j} = \{S_{j-1}\}$, then there exists a set $T$ containing every $S_{j}$. Here is a small preview of $S$:
+6. Axiom of infinity: If we have a set, $S$, and $\emptyset \in S$ with $S_{j} = \{S_{j-1}\}$, then there exists a set $T$ containing every $S_{j}$. Here is a small preview of $S$:
 $$
 	\begin{align*}
-		S_{0} &= \varnothing \\[5pt]
-		S_{1} &= \{\varnothing\} \\[5pt]
-		S_{2} &= \{\{\varnothing\}\} \\[5pt]
-		S_{3} &= \{\{\{\varnothing\}\}\} \\[5pt]
+		S_{0} &= \emptyset \\[5pt]
+		S_{1} &= \{\emptyset\} \\[5pt]
+		S_{2} &= \{\{\emptyset\}\} \\[5pt]
+		S_{3} &= \{\{\{\emptyset\}\}\} \\[5pt]
 		     &\vdots \\[5pt]
-		T &= \{\varnothing, S_{1}, S_{2}, ...\} \\[5pt]
-		T &= \{\varnothing, \{\varnothing\}, \{\{\varnothing\}\}, \{\{\{\varnothing\}\}\}, ...\}
+		T &= \{\emptyset, S_{1}, S_{2}, ...\} \\[5pt]
+		T &= \{\emptyset, \{\emptyset\}, \{\{\emptyset\}\}, \{\{\{\emptyset\}\}\}, ...\}
 	\end{align*}
 $$
 7. Axiom of power set: For any given set $S$ there exists a set $T$ containing every possible subset of $S$.
@@ -1525,7 +1525,7 @@ Much like with our boolean formulas, predicates can have logical equivalences. H
 Just as we'd suspect, all previous logical implications also work with predicates. Here are a few examples:
 - $(\forall{x}\in Sp(x)) \land (y \in S) \models p(y)$: All humans are mortal and Socrates is human implies Socrates is mortal
 - $p(x) \land (x \in S) \models \exists{y} \in S p(y)$: Socrates is male and human implies there exists some human who is male
-- $(\forall{x} \in S p(x)) \land (S \ne \varnothing) \models \exists{y} \in S p(y)$: All humans are mortal and there exists humans implies there exists a human who is mortal
+- $(\forall{x} \in S p(x)) \land (S \ne \emptyset) \models \exists{y} \in S p(y)$: All humans are mortal and there exists humans implies there exists a human who is mortal
 
 <p style='font-size: 10px'>Example taken from QUT slides</p>
 
@@ -2120,7 +2120,7 @@ digraph G {
 ### Recursive Definition of Ancestors
 
 Let's say we have vertex $v$, we would then call all ancestors of $v$ $A(v)$.
-- If $v$ is the root, then $A(v) = \varnothing$
+- If $v$ is the root, then $A(v) = \emptyset$
 - If $v$ is not the root, then $A(v) = \{P(v)\} \cup A(P(v))$
 
 In the below example, the root is chosen to be $A$ with:
@@ -2335,7 +2335,7 @@ The maximum flow problem on a weighted graph is to find the flow with the highes
 ### Augmenting Paths
 Given a flow network $G=(V,E)$ where the capacities (weights) are represented as $c$ and a flow is represented as $f$. An augmenting path is a sequence of vertices $$s=v_{1},v_{2},...,v_{n}=d$$ where no vertex repeats, such that:
 - For each $j=1...n-1$, either $(v_{j},v_{j+1}) \in E$ (the next vertex is in $E$) or $(v_{j+1}, v_{j}) \in E$ (the previous vertex is in $E$).
-- If $e = (v_{j},v_{j+1}) \in E$ then $a(e) := c(e) - f(e) > 0$
+- If $e = (v_{j},v_{j+1}) \in E$ then $a(e) := w(e) - f(e) > 0$
 - If $e = (v_{j+1},v_{j}) \in E$ then $a(e) := f(e) > 0$
 
 It can then be said that the capacity of an augmenting path is the minimum $a(e)$ among all $e$ in the path. 
@@ -2365,3 +2365,283 @@ The Ford-Fulkerson method is a method to finding all maximum flows in a flow net
 2. Find a valid augmenting path. If none exist, then return $f$
 3. Update $f$ according to the found augmenting path
 4. Go back to step 2 and repeat
+
+### Directed Path
+A directed path is a sequence of unique vertices $v_{1},...,v_{j}$ in any directed graph $G=(V,E)$ such that $(v_{k},v_{k+1}) \in E$ for each $k=1...j-1$. Direct paths are much like their regular counterpart in undirected graphs with the only difference of not being they must respect the direction of the edges.
+
+### Edge Cut
+Given a directed graph $G$, a source $s \in V$ and a drain $d \in V$, an edge cut or cut is a set of edges $T$ such that there exists no directed path from $s$ to $d$ in the graph $(V,E \setminus T)$. In other words, any directed path going from $s$ to $d$ must go along some edge in $T$. These cuts then define the set of edges that, when removed, prevent the flow from $s$ to $d$.
+
+The capacity of a cut is the sum of all edges in the cut. We call a cuts who's capacity is minimum along all possible cuts the minimum cut.
+
+### Max-flow Min-cut
+For any directed graph $G=(V,E)$ with source $S \in V$, drain $d \in V$, and weights $w$, then we can state that the maximum value of a flow on $G$ is equal to the minimum value of a cut of $G$. In other words, if we find a flow with the value of $v$ and we find a cut with the capacity of $v$ then we know that the flow is maximum and the cut is minimum.
+
+### Matchings on Bipartite Graphs
+A matching on a bipartite graph $G=(V,E)$ is a subset $M \subseteq E$ such that no vertex of $V$ is incident with more than one edge in $M$. A maximum matching on a graph is a matching such that no other matching on the graph has more edges. We can actually reduce the problem of finding maximum matchings to finding maximum flows. We can do this by following a four step process:
+1. Add additional vertices $s$ and $d$
+2. Add edges $(s,a)$ for all $a \in A$
+3. Add edges $(b,d)$ for all $b \in B$
+4. Add weight 1 for every edge
+
+<br>
+
+<h2 id="week10">Week 10: Finite State Automata</h2>
+
+### Symbols and Alphabets
+We first start with some set of symbols $\Sigma \ne \emptyset$ which we call the alphabet. The alphabet is the set $\Sigma$ and the elements represent the symbols. These symbols can be anything, for example:
+- $\{0, 1\}$
+- $\{a,b,c...,z\}$
+- Set of all printable ASCII characters
+- Set of all UNICODE characters
+
+We can then say a string over $\Sigma$ is a sequence of symbols in $\Sigma$.
+- We sometimes call these strings words
+- Starting from left where the first index is 1, $x_j$ will refer to the $j$th symbol in $x$
+- The length of a string isd the number of symbols in the sequence
+- A string of length 0 is called an empty string. We denote this with the $\varepsilon$ symbol.
+- The set $\Sigma^{*}$ (the Kleene star) is the set of all strings over $\Sigma$ of any length
+
+Much like with bit-strings we can concatenate two strings together.
+- $x = s_{1}s_{2}...s_{j} \in \Sigma^*$
+- $y = t_{1}t_{2}...t_{j} \in \Sigma^*$
+- $xy = s_{1},s_{2}...s_{j}t_{1}t_{2}...t_{k}$
+
+A more practical example could show:
+
+$$
+	\begin{align*}
+		x = \textrm{abc} \ \ y = 123 \\
+		xy = \textrm{abc}123
+	\end{align*}
+$$
+
+### Languages
+A language over an alphabet $\Sigma$ is a set of strings over $\Sigma$. In other words, a language $L$ is any subset $L \subseteq \Sigma^{*}$. We can specify a language in two different ways.
+1. We can write out the language explicitly:
+
+$$
+	L = \{1,11,111,1111\}
+$$
+
+2. Or we can write out rules for the strings the language contains:
+
+$$
+	L = \{x \in \{0,1\}^{*} : x_{1} = 1\}
+$$
+
+### Decision Problems
+For every language $L$ there exists a problem called the decision problem. This problem is all about deciding whether a given string $x \in \Sigma^{*}$ is in $L$ or not. We can phrase any computation problem with a yes or no answer as a decision problem.
+
+### Language Operations
+Due to languages being at their core being sets, we can apply operations on them such as $\cup$ or $\cap$. We can also concatenate languages by simply pairwise concatenating all their elements.
+
+$$
+	A \cdot B := \{ab : a \in A, b \in B\}
+$$	
+
+Let's see an example of this:
+
+Let:
+$$
+	\begin{align*}
+		A = \{0,1\}, \ \ B = \{a,b\}
+	\end{align*}
+$$
+
+Then:
+$$
+	\begin{align*}
+		A \cdot B &= \{0a, 0b, 1a, 1b\} \\
+		A \cdot A &= \{00, 01, 10, 11\} \\ 
+		A \cup B &= \{0,1,a,b\}
+	\end{align*}
+$$
+
+### Kleene Star
+We call the Kleene star of a language $A$ as the set of all possible concatenations of any length of strings from $A$.
+- $A^0 := \{\varepsilon\}$
+- $A^1 := A$
+- $A^j := A^{j-1} \cdot A$
+- $A^* := A^0 \cup A^1 \cup A^2 \cup ...$
+
+The Kleene plus is similar to the Kleene start except we omit the empty string.
+
+$$
+	A^+ := A^0 \cup A^1 \cup A^2 \cup ... 
+$$
+
+### Regular Languages
+Regular languages are particular sets of languages that have some form of structure tied to them. These can be defined by a few rules such as:
+- $\emptyset$ and $\{\varepsilon\}$ are regular languages
+- For each $a \in \Sigma$ we can say that $\{a\}$ is a regular language
+- If $A$ and $B$ are said to be regular languages, than any combination of them be it $A \cup B$, $A \cdot B$ or $A^*$ are all regular languages
+- There exist no other regular languages other than the onces described above
+
+Some examples of regular languages could be:
+- A set of IP addresses in some format (e.g. 192.168.1.1)
+- A set of legal email addresses (following some format)
+- A set of valid dates in DD-MM-YYYY format
+
+### Non-regular Languages
+
+### Languages in Python
+While Python provides us a datatype for strings, these are generally only intended for Unicode characters. For strings over arbitrary elements we can use tuples. Programmatically, languages are usually dealt with by building a parser, rather than sets of strings. However, the mathematical definitions can still be implemented.
+
+```python
+>>> S = { (0, 1), (1, 1) }
+>>> T = { (0, 0), (1,) }
+>>>
+>>> { s + t for s in S for t in T }    # Concatenate two languages
+>>> {(0, 1, 1), (1, 1, 0, 0), (0, 1, 0, 0), (1, 1, 1)}
+>>> S | T    # The union of languages S and T
+>>> {(0, 1), (0, 0), (1, 1), (1,)}
+>>>
+>>> A = { 0, 1 }
+>>>
+>>> def strLenN(A, n):    # Strings of length n over A
+>>> 	if n == 0:
+>>> 		return { () }
+>>> 	else:
+>>> 		return { s + (a,) for s in strLenN(A, n-1) for a in A }
+>>>
+>>> strLenN(A, 2)
+>>> {(0, 1), (1, 0), (0, 0), (1, 1)}
+```
+
+### Regular Expressions
+Regular expressions are a way we can specify a regular language over an alphabet $\Sigma$. Regular expressions over an alphabet $\Sigma$ are strings over $\Sigma \cup \{(,),\mid,*\}$. Some things to note about regular expressions are:
+- The empty string $\varepsilon$ is a regular expression
+- $x$ is a regular expression for an $x \in \Sigma$ (literals)
+- if $x$ is a regular expression then ($x$) is a regular expression
+- if $x$ and $y$ are regular expressions then $xy$, $x | y$ and $x^*$ are also regular expressions
+
+We must also follow the order of operations when it comes to regular expressions. Listed below in order from highest priority to lowest:
+1. $()$
+2. Kleene star
+3. Concatenation
+4. $\mid$
+
+### Matching
+Regular expressions are specifications for strings following a certain pattern. If the string in question follows the pattern specified by the regular expression then we can say that the regular expression matches the string. The rules for matching are:
+- $\varepsilon$ matches the string $\varepsilon$
+- for any $x \in \Sigma$, $x$ matches the string $x$
+- for any two regular expressions $x$ and $y$, $xy$ will match a string $z$ where if $z=uv$, $x$ matches $u$ and $v$ matches $y$
+- for any two regular expressions $x$ and $y$, $x | y$ will match a string $z$ if $x$ or $y$ matches $z$
+- for a regular expression $x$, $x*$ matches $z$ if $z=z_{1}z_{2}...z_{j}$ and $x$ matches each of $z_1$, $z_2$, $z_j$
+
+Some examples may include:
+- (ab)+c matches abc, ababc, abababc etc
+- (a|b)*c matches c, ac, bc, aac, abc, bac, bbc, aaac, etc
+
+Using all of this we can conclude that:
+- For any regular expression $x$, the set of strings that $x$ matches is a regular language
+- For any regular language $L$, there exists a regular expression that matches exactly the set of strings in $L$
+
+### Regular Expression Extensions
+We can make regular expressions easier to use by adding some syntactic sugar to our syntax. Here are a few examples:
+- $x$+ is the same as $xx*$
+- $[xyz]$ is the same as $(x|y|z)$
+- $.$ is the same thing as [ every symbol in $\Sigma$ ]
+
+### Regular Expressions in Python
+We can use regular expressions in Python by importing the module `re`. We define regular expressions as strings in Python.
+
+```python
+>>> import re
+>>>
+>>> r = 'a+b+c'                  # Define a regular expression
+>>> s = 'blahabcddeeaabbccaa'    # Define some string
+>>> re.findall(r, s)             # Return a list of all substrings matching r
+['abc', 'aabbc']
+>>> re.split(r, s)               # Split the string on substrings matching r
+['blah', 'ddee', 'caa']
+>>> re.sub(r, 'MATCH', s)        # Substitute matches of r with some text
+'blahMATCHddeeMATCHcaa
+>>> m = re.search(r, s)          # Search for the first match of r
+>>> m.span()                     # Start and end location of the first match
+(4, 7)
+>>> m.group()                    # The matching substring
+'abc'
+```
+
+### Finite State Automata
+A finite state automoton is a computational model used to simulate sequential logic. An FSA consists of:
+- An alphabet $\Sigma$
+- A finite set $S$ of states
+- An initial starting state $S_0 \in S$
+- A set of accepting states $A \subseteq S$
+- And finally a function to change the state $\delta : S \times \Sigma \rightarrow S$
+
+We use a FSA by feeding it some input $x = x_{1}x_{2}...x_{n} \in \Sigma^*$ such that:
+
+$$
+	\begin{align*}
+		t_0 &= s_0 \\
+		t_j &= \delta(t_{j-1}, x_{j}) \textrm{ for } j = 1...n
+	\end{align*}
+$$
+
+Where our conditional logic states:
+- If $t_n \in A$ then the FSA accepts $x$
+- If $t_n \notin A$ then the FSA rejects $x$
+
+### State Change Diagrams
+We can use a state change diagram to depict a FSA in a directed graph-like format where:
+- Each state is a vertex
+- We draw an edge $(s,t)$ with the label $x$ if $\delta(s,x) = t$
+- If there exists an occurance where $\delta(s,x) = t$ for multiple $x$, then we simply draw one edge with multiple labels 
+- The diagram is allowed to contain loops. That is a vertex can have an edge to itself
+- Mark the accepting states (in the unit we will use a double circle)
+
+Here is an example of a state change diagram:
+![State Change Digram Example](./assets/statechangediagram1.png)
+
+### Recognising Languages
+A FSA $M = (\Sigma, S, s_{0}, \delta, A)$ recognises a language $L \subseteq \Sigma^*$ if:
+- For every $x \in L$, $M$ accepts $x$
+- For every $x \notin L$, $M$ rejects $x$
+
+### Kleene's Theorem
+Kleene's theorem states that the set of languages that are recognisable by some FSA is the same as the set of regular languages. That is to say, every regular language is recognised by some FSA and every FSA recognises some regular language.
+
+### FSA Diagram Examples
+This is an FSA diagram to recognise the regular expression `abab`
+![abab FSA Diagram](./assets/ababFSAexample.png)
+
+This is an FSA diagram to recognise the regular expression `aba*b`
+![aba*b FSA Diagram](./assets/aba*bFSAexample.png)
+
+This is an FSA diagram to recognise the regular expression `aab*`
+![aab* FSA Diagram](./assets/aab*FSAexample.png)
+
+### Kleene Plus and Special Cases
+There are a few special cases that break our simple method however we do have some fixes for them.
+- The expression $a$+ is the same as $aa*$
+- The expression $a*a$ is the same as $aa*$
+
+There are more however we won't cover them.
+
+### FSA's in Python
+
+```python
+delta = {
+	(1, 0) : 2,
+	(1, 1) : 1,
+	(2, 0) : 2,
+	(2, 1) : 3,
+	(3, 0) : 2,
+	(3, 1) : 3
+}
+
+def runFSA(start, delta, accepting, input):
+	state = start
+
+	for i in input:
+		state = delta[(state, i)]
+
+	return state in accepting
+
+runFSA(1, delta, { 3 }, (1,0,1,1))  # True
+runFSA(1, delta, { 3 }, (1,0,0))    # False
+```
