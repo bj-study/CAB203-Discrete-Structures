@@ -17,7 +17,7 @@ Dr Matthew McKague | Notes for CAB203 at the Queensland University of Technology
 		<li><a href="#week8">Week 8</a>: Trees</li>
 		<li><a href="#week9">Week 9</a>: Directed Graphs</li>
 		<li><a href="#week10">Week 10</a>: Finite State Automata</li>
-		<li><a href="#week11">Week 11</a>: </li>
+		<li><a href="#week11">Week 11</a>: Linear Algebra</li>
 		<li><a href="#week12">Week 12</a>: </li>
 		<li><a href="#week13">Week 13</a>: </li>
 	</ul>
@@ -2021,7 +2021,6 @@ def distanceClassesR(V, E, D):
 
 print(distanceClasses(V, E, 1))
 ```
-
 ### Bipartite Graphs
 A bipartite graph is a set of graph vertices split into two disjoint sets $(A,B)$ in such a way that no two graph vertices within the same set are adjacent. If this is the case $(A,B)$ can be called a bipartition of $G$.
 
@@ -2301,13 +2300,13 @@ This relationship breaks our anti-symmetric relationship therefore no longer bei
 Sometimes when using graphs there's information we'd like to capture that just isn't possible by using graphs alone. We can add additional information to a graph by using weights. In the context of edges, an example of adding weight to an edge may be giving it a label. We can do this by defining some function $w : E \rightarrow \mathbb{R}$ ($\mathbb{R}$ can be replaced with other things like $\mathbb{Z}$, $\mathbb{N}$ or even another co-domain) where $E$ is our edge and $\mathbb{R}$ references the value associated with the edge. We can then say that for $e \in E$, the weight of $e$ is $w(e)$.
 
 ### Flows
-A flow network is a directional graph where each edge has a capacity (weight) $c_e$ and a flow $f_e$. Each flow in the network contains a source and a drain and is bound by 3 constraints. The first constraint states that there exists no flow into the source and no flow out of the drain. The second constraint states that the flow on each edge cannot be a negative and must be less than the edges capacity. The third constraint states that, excluding the source and drain, the flow value going into a vertex must be equal to the flow value going out of that vertex.
+A flow network is a directional graph where each edge has a capacity (weight) $w_e$ and a flow $f_e$. Each flow in the network contains a source and a drain and is bound by 3 constraints. The first constraint states that there exists no flow into the source and no flow out of the drain. The second constraint states that the flow on each edge cannot be a negative and must be less than the edges capacity. The third constraint states that, excluding the source and drain, the flow value going into a vertex must be equal to the flow value going out of that vertex.
 
 We can mathematically state the source of a flow as a function $f: E \rightarrow \mathbb{R}$ where $s \in V$ represents the source and $d \in D$ represents the drain. We can then state our 3 constraints as:
 1. $$\forall{(u,s)} \in E \ f((u,s)) = 0 \\ \forall{(d,u)} \in E \ f((d,u)) = 0$$
 2. $\forall{e} \in E$ 
 $$
-	0 \le f(e) \le c(e)
+	0 \le f(e) \le w(e)
 $$
 3. $\forall{v} \in V \setminus \{s,d\}$ 
 $$
@@ -2333,7 +2332,7 @@ $$
 The maximum flow problem on a weighted graph is to find the flow with the highest flow value.
 
 ### Augmenting Paths
-Given a flow network $G=(V,E)$ where the capacities (weights) are represented as $c$ and a flow is represented as $f$. An augmenting path is a sequence of vertices $$s=v_{1},v_{2},...,v_{n}=d$$ where no vertex repeats, such that:
+Given a flow network $G=(V,E)$ where the capacities (weights) are represented as $w$ and a flow is represented as $f$. An augmenting path is a sequence of vertices $$s=v_{1},v_{2},...,v_{n}=d$$ where no vertex repeats, such that:
 - For each $j=1...n-1$, either $(v_{j},v_{j+1}) \in E$ (the next vertex is in $E$) or $(v_{j+1}, v_{j}) \in E$ (the previous vertex is in $E$).
 - If $e = (v_{j},v_{j+1}) \in E$ then $a(e) := w(e) - f(e) > 0$
 - If $e = (v_{j+1},v_{j}) \in E$ then $a(e) := f(e) > 0$
@@ -2398,7 +2397,7 @@ We first start with some set of symbols $\Sigma \ne \emptyset$ which we call the
 We can then say a string over $\Sigma$ is a sequence of symbols in $\Sigma$.
 - We sometimes call these strings words
 - Starting from left where the first index is 1, $x_j$ will refer to the $j$th symbol in $x$
-- The length of a string isd the number of symbols in the sequence
+- The length of a string is the number of symbols in the sequence
 - A string of length 0 is called an empty string. We denote this with the $\varepsilon$ symbol.
 - The set $\Sigma^{*}$ (the Kleene star) is the set of all strings over $\Sigma$ of any length
 
@@ -2645,3 +2644,921 @@ def runFSA(start, delta, accepting, input):
 runFSA(1, delta, { 3 }, (1,0,1,1))  # True
 runFSA(1, delta, { 3 }, (1,0,0))    # False
 ```
+
+<br>
+
+<h2 id="week11">Week 11: Linear Algebra</h2>
+
+### Vectors
+A vector of dimension $n$ is an element $\vec{x}$ of $\mathbb{R}^n$. We then call the real numbers $x_i$ as the coordinates or components of our vector $\vec{x}$. Visually, column vectors are represented as verticle tuples such that:
+
+$$
+	\vec{x} = \begin{pmatrix}
+		x_1 \\
+		x_2 \\
+		\vdots \\
+		x_n
+	\end{pmatrix}
+$$
+
+As well as column vectors, there exists row vectors which are represented like $\vec{x} = (x_1 \ x_2 \ x_3)$
+
+### Special Vectors
+There are a few vectors that are special in some way or another. 
+
+- The origin is a vector which contains only zeros
+
+$$
+	\vec{0} = \begin{pmatrix}
+		0 \\
+		0 \\
+		\vdots \\
+		0
+	\end{pmatrix}
+$$
+
+- The standard basis vectors for dimension $n$ are special vectors. These vectors contain a 1 in only one place with the rest of the spots being zero. For $n$ dimensions, we can say that there are exactly $n$ of these vectors.
+
+$$
+	\vec{e_{1}} = \begin{pmatrix}
+		1 \\
+		0 \\
+		0 \\
+		\vdots \\
+		0
+	\end{pmatrix} \ \
+	\vec{e_{2}} = \begin{pmatrix}
+		0 \\
+		1 \\
+		0 \\
+		\vdots \\
+		0
+	\end{pmatrix} \ \
+	\cdots \ \
+	\vec{e_{n}} = \begin{pmatrix}
+		0 \\
+		0 \\
+		\vdots \\
+		0 \\
+		1 \\
+	\end{pmatrix}
+$$
+
+### Operations on Vectors
+Two vectors are equal under two conditions:
+1. Both vectors have the same number of components
+2. The corresponding components are equal
+
+For example:
+- $\vec{x} = (1 \ 2)$ and $\vec{y} = (1 \ 2)$ then $\vec{x} = \vec{y}$
+- $\vec{x} = (1 \ 2)$ and $\vec{y} = (2 \ 1)$ then $\vec{x} \ne \vec{y}$
+- $\vec{x} = (1 \ 1 \ 1)$ and $\vec{y} = (1 \ 1)$ then $\vec{x} \ne \vec{y}$
+
+### Vector Operations
+There are a number of operations we can apply to vectors:
+- Addition/Subtraction of two vectors is done component-wise. It's important to note we can't combine 2 vectors of different sizes.
+$$
+	\vec{x} + \vec{y} = 
+		\begin{pmatrix}
+			x_1 \\
+			x_2 \\
+			\vdots \\
+			x_n
+		\end{pmatrix} +
+		\begin{pmatrix}
+			y_1 \\
+			y_2 \\
+			\vdots \\
+			y_n
+		\end{pmatrix} =
+		\begin{pmatrix}
+			x_1 + y_1 \\
+			x_2 + y_2 \\
+			\vdots \\
+			x_n + y_n
+		\end{pmatrix}
+$$
+- Scalar multiplication is the multiplication of some real number $a$ and a vector.
+$$
+	a\vec{x} =
+		a \begin{pmatrix}
+			x_1 \\
+			x_2 \\
+			\vdots \\
+			x_n
+		\end{pmatrix} =
+		\begin{pmatrix}
+			ax_1 \\
+			ax_2 \\
+			\vdots \\
+			ax_n
+		\end{pmatrix} 
+$$
+
+### Linear Combinations
+Linear combination is the process of combining vector addition and scalar multiplications. Let's imagine we have $\{\vec{x_{1}},\ldots,\vec{x_{n}}\} \subseteq \mathbb{R}^n$ and $\{a_{1},\ldots,a_{n}\} \subseteq \mathbb{R}$. We can form a linear combination of the vectors such that:
+
+$$
+	\vec{y} = \sum_{j=1}^{n}a_{j}\vec{x}_{j} = a_{1}\vec{x_{1}} + \cdots + a_{n}\vec{x+{n}}
+$$
+
+Where each number $a_j$ is called a weight or coefficient. Below is a practical example of this equation.
+
+$$
+	\vec{x} =
+	\begin{pmatrix}
+		1 \\
+		7 \\
+	\end{pmatrix} \ \ \
+	\vec{y} =
+	\begin{pmatrix}
+		4 \\
+		3 \\
+	\end{pmatrix} \ \ \
+	a = \frac{1}{2} \ \ \
+	b = -3 
+$$
+$$
+	\begin{align*}
+		\vec{z} &= a\vec{x} + b\vec{y} \\[10pt]
+			&= \frac{1}{2} \begin{pmatrix}
+				1 \\
+				2 \\
+			\end{pmatrix} +
+			(-3) \begin{pmatrix}
+				4 \\
+				3 \\
+			\end{pmatrix} \\[10pt]
+			&= \begin{pmatrix}
+				\frac{1}{2} \\
+				1 \\
+			\end{pmatrix} -
+			\begin{pmatrix}
+				12 \\
+				9 \\
+			\end{pmatrix} \\[10pt]
+			&= \begin{pmatrix}
+				-11.5 \\
+				-8 \\
+			\end{pmatrix}
+	\end{align*}
+$$
+
+A basis for $\R^n$ is a set of $n$-dimensional vectors $\Beta$ such that for every vector in $\R^n$ can be written as a linear combination of the vectors in $\Beta$. For example, every vector $\vec{x} \in \R^n$ is a linear combination of $\{\vec{e_1},\ldots,\vec{e_n}\}$.
+
+$$
+	\vec{x} = \sum_{j=1}^{n}x_j\vec{e_j}
+$$
+
+For example:
+
+$$
+	\vec{x} = 
+		\begin{pmatrix}
+			1 \\
+			2 \\
+			3 \\
+		\end{pmatrix} \ \ \ \
+	\vec{e_1} = 
+		\begin{pmatrix}
+			1 \\
+			0 \\
+			0 \\
+		\end{pmatrix}
+	\vec{e_2} = 
+		\begin{pmatrix}
+			0 \\
+			1 \\
+			0 \\
+		\end{pmatrix} 
+	\vec{e_3} = 
+		\begin{pmatrix}
+			0 \\
+			0 \\
+			1 \\
+		\end{pmatrix}
+$$
+$$
+	\begin{align*}
+		\vec{z} &= (1)\vec{e_1} + (2)\vec{e_2} + (3)\vec{e_3} \\
+		&=
+		1\begin{pmatrix}
+			1 \\
+			0 \\
+			0 \\
+		\end{pmatrix} +
+		2\begin{pmatrix}
+			0 \\
+			1 \\
+			0 \\
+		\end{pmatrix} +
+		3\begin{pmatrix}
+			0 \\
+			0 \\
+			1 \\
+		\end{pmatrix} \\
+	&=
+		\begin{pmatrix}
+			1 \\
+			0 \\
+			0 \\
+		\end{pmatrix} +
+		\begin{pmatrix}
+			0 \\
+			2 \\
+			0 \\
+		\end{pmatrix} +
+		\begin{pmatrix}
+			0 \\
+			0 \\
+			3 \\
+		\end{pmatrix} \\
+	&=
+		\begin{pmatrix}
+			1 \\
+			2 \\
+			3 \\
+		\end{pmatrix}
+	\end{align*} \\
+$$
+
+### Dot Product
+The dot product, or inner product, of two $n$-dimensional vectors $\vec{x}$ and $\vec{y}$ can be donated as such $\vec{x} \cdot \vec{y}$. The dot product of two vectors will produce their scalar value and can be achieved by multiplying the corresponding components and adding their result.
+
+$$
+	\vec{x} \cdot \vec{y} = \sum_{j=1}^{n}x_{j}y_{j}
+$$
+
+For example:
+
+$$
+	\begin{align*}
+		\begin{pmatrix}
+			1 \\
+			2 \\
+		\end{pmatrix} \cdot
+		\begin{pmatrix}
+			3 \\
+			4 \\
+		\end{pmatrix} &=
+		1 \cdot 3 + 2 \cdot 4 \\ &= 3 + 8 \\ &= 11
+	\end{align*}
+$$
+
+### Linear Transformations
+Earlier through the semester we studied functions. It turns out that we can define functions over vectors such that $f : \R^n \rightarrow \R^n$. A linear transformation, or linear function, $f : \R^n \rightarrow \R^n$ satisfies:
+
+$$
+	f(a\vec{x} + b\vec{y}) = af(\vec{x}) + bf(\vec{y})
+$$
+
+What this means is that lines map to lines and the origin maps to the origin.
+
+Here are some linear transformation examples:
+Linear:
+- $$ f 
+	\begin{pmatrix}
+		\begin{pmatrix}
+			x \\
+			y \\
+		\end{pmatrix}
+	\end{pmatrix} = 
+	\begin{pmatrix}
+			4x + 3y \\
+			x - y \\
+		\end{pmatrix} 
+$$
+- $$ f 
+	\begin{pmatrix}
+		\begin{pmatrix}
+			x \\
+			y \\
+		\end{pmatrix}
+	\end{pmatrix} = 
+	\begin{pmatrix}
+			y \\
+			-x \\
+		\end{pmatrix} 
+$$
+
+Non-linear
+- $$ f 
+	\begin{pmatrix}
+		\begin{pmatrix}
+			x \\
+			y \\
+		\end{pmatrix}
+	\end{pmatrix} = 
+	\begin{pmatrix}
+			x^2 \\
+			y \\
+		\end{pmatrix} 
+$$
+- $$ f 
+	\begin{pmatrix}
+		\begin{pmatrix}
+			x \\
+			y \\
+		\end{pmatrix}
+	\end{pmatrix} = 
+	\begin{pmatrix}
+			\cos x \\
+			\sin y \\
+		\end{pmatrix} 
+$$
+
+### Matrices
+A matrix can be said to be the product of a combination of vectors. 
+- A matrix of size $m \times n$ has $m$ rows and $n$ columns. 
+- We can say that a matrix is square if $m = n$. In other words if the number of rows and number of columns are equal.
+
+Here are a few examples of matrices:
+
+$$
+\begin{pmatrix}
+	1 & 0 \\
+	0 & -1
+\end{pmatrix},
+\begin{pmatrix}
+	0 & 2 \\
+	0.5 & \sqrt{2} \\
+	1 & 1
+\end{pmatrix},
+\begin{pmatrix}
+	0 & 0 & 0 & 1 \\
+	0 & 0 & 1 & 0
+\end{pmatrix}
+$$
+
+For a $m \times n$ matrix $A$, the items inside are refered to by $a_{jk}$ where $j$ refers to the items row and $k$ refers to the items column.
+
+$$
+  A_{m\times n} =
+  \left( {\begin{array}{cccc}
+    a_{11} & a_{12} & \cdots & a_{1n}\\
+    a_{21} & a_{22} & \cdots & a_{2n}\\
+    \vdots & \vdots & \ddots & \vdots\\
+    a_{m1} & a_{m2} & \cdots & a_{mn}\\
+  \end{array} } \right)
+$$
+
+### Special Matrices
+Similar to how we have special vectors, there also exist special matrices.
+
+- The zero matrix, denoted as $0_{m \times n}$, is a matrix which consist of only 0's
+
+$$
+  0_{m \times n} =
+  \left( {\begin{array}{cccc}
+    0 & 0 & \cdots & 0 \\
+    0 & 0 & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    0 & 0 & \cdots & 0 \\
+  \end{array} } \right)
+$$
+
+- The identity matrix, denoted as $I$, is a square matrix with 1's along the diagonal and 0's elsewhere. There exists a separate identity for each dimension $n$
+$$
+  I =
+  \left( {\begin{array}{cccc}
+    1 & 0 & \cdots & 0 \\
+    0 & 1 & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    0 & 0 & \cdots & 1 \\
+  \end{array} } \right)
+$$
+This can also be described as
+$$
+I_{jk} = \begin{cases}
+		1 &: j=k \\
+		0 &: \textrm{otherwise}
+	\end{cases} 
+$$
+
+### Matrix Operations
+#### Matrix Equality
+It can be said that two matrices $A$ and $B$ are equal if the corresponding entries are equal. That is $a_{jk} = b_{jk}$ for each $j = 1,2,\dots,m$ and each $k = 1,2,\dots,n$. For two matrices to be equal they must be of the same size.
+
+#### Matrix Addition
+Two matricies can be added together so long as their dimensions are the same. Matrix addition is simply the addition of the corresponding entries. For example, $A + B = C$ where $c_{jk} = a_{jk} + b_{jk}$ for each $j=1,2,\dots,m$ and $k=1,2,\dots,n$\dots
+
+For example,
+$$
+	\begin{align*}
+		\begin{pmatrix}
+			2 & 5 \\
+			7 & -1
+		\end{pmatrix} +
+		\begin{pmatrix}
+			4 & 3 \\
+			-2 & 1
+		\end{pmatrix} &=
+		\begin{pmatrix}
+			2+4 & 5+3 \\
+			7+(-2) & -1+1
+		\end{pmatrix} \\[10pt] &= 
+		\begin{pmatrix}
+			6 & 8 \\
+			5 & 0
+		\end{pmatrix}
+	\end{align*}
+$$
+
+#### Scalar Multiplication
+In scalar multiplcation we simply multiply every element in the matrix by our scalar value.
+- Let $kA$ denote the scalar product of $k \in \R$ and matrix $A$
+- $kA$ can be obtained by multiplying every entry in $A$ by $k$
+
+$$
+  kA =
+  \left( {\begin{array}{cccc}
+    k \cdot a_{11} & k \cdot a_{12} & \cdots & k \cdot a_{1n} \\
+    k \cdot a_{21} & k \cdot a_{22} & \cdots & k \cdot a_{2n} \\
+    \vdots & \vdots & \ddots & \vdots \\
+    k \cdot a_{m1} & k \cdot a_{m2} & \cdots & k \cdot a_{mn} \\
+  \end{array} } \right)
+$$
+
+For example,
+$$
+	\begin{align*}
+		(-2)
+		\begin{pmatrix}
+			2 & 5 \\
+			7 & -1
+		\end{pmatrix} &=
+		\begin{pmatrix}
+			-2 \cdot 2 & -2 \cdot 5\\
+			-2 \cdot 7 & -2 \cdot -1
+		\end{pmatrix} \\[10pt] &= 
+		\begin{pmatrix}
+			-4 & -10 \\
+			-14 & 2
+		\end{pmatrix}
+	\end{align*}
+$$
+
+#### Multiplying Matrices by Vectors
+If we have some $\vec{x} \in \R^n$ and a $n \times n$ matrix $A$, we can multiply them together to produce another vector. It's important to note that the matrix must go on the left when being multiplied by a column vector. 
+
+$$
+	\vec{z} = A\vec{x}
+$$
+
+where
+
+$$
+	z_j = \sum_{k=1}^n a_{jk} x_k
+$$
+
+or equivalently, where $\vec{c_j}$ are the columns of $A$
+
+$$
+	z_j = A\vec{x} = \sum_{k=1}^n x_j \vec{c_j}
+$$
+
+That is, where $A\vec{x}$ is a linear combination of the columns of $A$ with the coefficients given by the entries of $\vec{x}$
+
+For example,
+$$
+	\begin{align*}
+		\begin{pmatrix}
+			1 & 2 \\
+			3 & 4
+		\end{pmatrix}
+		\begin{pmatrix}
+			7 \\
+			5 
+		\end{pmatrix} &=
+		\begin{pmatrix}
+			\begin{pmatrix}
+				1 \\
+				2 
+			\end{pmatrix} \cdot \begin{pmatrix}
+				7 \\
+				5 
+			\end{pmatrix} \\[10pt]
+			\begin{pmatrix}
+				3 \\
+				4 
+			\end{pmatrix} \cdot \begin{pmatrix}
+				7 \\
+				5 
+			\end{pmatrix}\\ 
+		\end{pmatrix} \\[23pt] &= 
+		\begin{pmatrix}
+			1 \cdot 7 + 2 \cdot 5 \\
+			3 \cdot 7 + 4 \cdot 5
+		\end{pmatrix} \\[10pt] &= 
+		\begin{pmatrix}
+			17 \\
+			41
+		\end{pmatrix}
+	\end{align*}
+$$
+
+Another way of looking at this could be
+$$
+	\begin{align*}
+		\begin{pmatrix}
+			1 & 2 \\
+			3 & 4
+		\end{pmatrix}
+		\begin{pmatrix}
+			7 \\
+			5 
+		\end{pmatrix} &=
+		7 \begin{pmatrix}
+			1 \\
+			3
+		\end{pmatrix} +
+		5 \begin{pmatrix}
+			2 \\
+			4
+		\end{pmatrix} \\[10pt] &= 
+		\begin{pmatrix}
+			7 \\
+			21
+		\end{pmatrix} +
+		\begin{pmatrix}
+			10 \\
+			20
+		\end{pmatrix} \\[10pt] &=
+		\begin{pmatrix}
+			17 \\
+			41
+		\end{pmatrix}
+	\end{align*}
+$$
+
+### More about the Identity Matrix
+We saw the identity matrix a little bit earlier in this guide but we didn't quite talk about what makes it so special. The identity matrix is a special square matrix where the diagonal consists of 1's and everywhere else 0.
+
+$$
+  I =
+  \left( {\begin{array}{cccc}
+    1 & 0 & \cdots & 0 \\
+    0 & 1 & \cdots & 0 \\
+    \vdots & \vdots & \ddots & \vdots \\
+    0 & 0 & \cdots & 1 \\
+  \end{array} } \right)
+$$
+
+What makes this matrix so special is that if we multiply some vector by it, nothing will happen. That is to say that the identity matrix is a special matrix that leaves all vectors alone.
+
+$$
+	\forall\vec{x} \ I\vec{x} = \vec{x}
+$$
+
+For example,
+$$
+	\begin{align*}
+		I_{2}\vec{x} =
+		\begin{pmatrix}
+			1 & 0 \\
+			0 & 1
+		\end{pmatrix}
+		\begin{pmatrix}
+			7 \\
+			5
+		\end{pmatrix} &= 
+		7 \begin{pmatrix}
+			1 \\
+			0
+		\end{pmatrix} +
+		5 \begin{pmatrix}
+			0 \\
+			1
+		\end{pmatrix} \\[10pt] &= 
+		\begin{pmatrix}
+			7 \\
+			0
+		\end{pmatrix} +
+		\begin{pmatrix}
+			0 \\
+			5
+		\end{pmatrix} \\[10pt] &=
+		\begin{pmatrix}
+			7 \\
+			5
+		\end{pmatrix}
+	\end{align*}
+$$
+
+### Linear Transformations Revisited
+Now that we know more about matrices and the way they can interact with other components it's important to make the connection that:
+- Every linear transformation can be represented as multiplying a vector by a matrix
+- Multiplying a vector by a matrix is a linear transformation
+
+### Matrix Multiplication
+Matrix multiplication is really just a function composition for matrices
+
+$$
+	A(B\vec{x}) = (AB)\vec{x}
+$$
+
+We can multiply two matricies, $A$ and $B$, together by:
+
+$$
+	(AB)_{jk} \sum_{\ell=1}^nA_{j\ell}B_{\ell k}
+$$
+
+It's important to note that $AB$ is not always the same as $BA$
+
+For example,
+$$
+\begin{align*}
+		\begin{pmatrix}
+			a & b \\
+			c & d
+		\end{pmatrix}
+		\begin{pmatrix}
+			e & f \\
+			g & h
+		\end{pmatrix} &=
+		\begin{pmatrix}
+			(ae+bg) & (af+bh) \\
+			(ce+dg) & (cf + dh)
+		\end{pmatrix}
+	\end{align*}
+$$
+
+### Matrix Inverse
+Matrices can sometimes have an inverse where
+
+$$
+(A^{-1}A)\vec{x} = \vec{x}
+$$
+
+Equivalently, $A^{-1}A = I$ since $I\vec{x} = \vec{x}$
+
+So how do we know if a matrix can have an inverse or not? We can use something called the determinant to help us with this problem. Let's see an example with a $2 \times 2$ matrix:
+
+$$
+	\textrm{det} \begin{pmatrix}
+		a & b \\ c & d
+	\end{pmatrix} := ad - bc
+$$
+
+A square matrix $A$ has an inverse if and only if $\textrm{det}(A) \ne 0$
+
+Finding the inverse of a $2 \times 2$ matrix is simple:
+
+$$
+	\begin{pmatrix}
+		a & b \\ c & d
+	\end{pmatrix}^{-1} = 
+	\frac{1}{ad-bc} \begin{pmatrix}
+		d & -b \\ -c & a
+	\end{pmatrix}
+$$
+
+If the determinate is $0$ then the fomrula will not work showing that the matrix does not have an inverse.
+
+For example:
+$$
+	\begin{align*}
+		\begin{pmatrix}
+			1 & 2 \\ 3 & 4
+		\end{pmatrix}^{-1} &= 
+		\frac{1}{(1 \cdot 4)-(2 \cdot 3)} \begin{pmatrix}
+			4 & -2 \\ -3 & 1
+		\end{pmatrix} \\[10pt]
+		&= \frac{1}{-2} \begin{pmatrix}
+			4 & -2 \\ -3 & 1
+		\end{pmatrix} \\[10pt]
+		&= \begin{pmatrix}
+			4/(-2) & (-2)/(-2) \\[5pt]
+			(-3)/(-2) & 1/(-2)
+		\end{pmatrix} \\[15pt]
+		&= \begin{pmatrix}
+			-2 & 1 \\[5pt]
+			1.5 & -0.5
+		\end{pmatrix} 	
+	\end{align*}
+$$
+
+### Linear Transformations
+
+#### Rotations
+To rotate a matrix at an angle of $\theta$ anti-clockwise, the linear transformation below can be applied:
+
+$$
+	\begin{pmatrix}
+		\cos{\theta} & -\sin{\theta} \\
+		\sin{\theta} & \cos{\theta}
+	\end{pmatrix}
+$$
+
+For example, to rotate a matrix by $45\degree$ anti-clockwise
+
+$$
+	\frac{1}{\sqrt{2}}\begin{pmatrix}
+		1 & -1 \\
+		1 & 1
+	\end{pmatrix}
+$$
+
+#### Scalings
+A matrix can be scaled up or down, or scaled by different axes in different amounts. To scale a matrix by $a$:
+
+$$
+	\begin{pmatrix}
+		a & 0 \\
+		0 & a
+	\end{pmatrix}
+$$
+
+To scale a matrix in the x direction by $a$ and the y direction by $b$:
+
+$$
+	\begin{pmatrix}
+		a & 0 \\
+		0 & b
+	\end{pmatrix}
+$$
+
+#### Reflections
+A matrix can be reflected about an axis. To reflect about the $x$ axis, use:
+
+$$
+	\begin{pmatrix}
+		1 & 0 \\
+		0 & -1
+	\end{pmatrix}
+$$
+
+To reflect about the $y$ axis, use:
+
+$$
+	\begin{pmatrix}
+		-1 & 0 \\
+		0 & 1
+	\end{pmatrix}
+$$
+
+#### Projections
+Projects flatten one dimension down to nothing. To project a matrix onto the $y$ axis (or flatten the $x$ axis), use:
+
+$$
+	\begin{pmatrix}
+		0 & 0 \\
+		0 & 1
+	\end{pmatrix}
+$$
+
+To project a matrix onto the $y$ axis (or flatten the $y$ axis), use:
+$$
+	\begin{pmatrix}
+		1 & 0 \\
+		0 & 0
+	\end{pmatrix}
+$$
+
+### Translations and Affine Transformations
+An Affine transformation is a transformation that maps lines to lines but doesn't necessarily map the origin to the origin. Affine transformations take on the form of:
+
+$$
+	f(\vec{x}) = A\vec{x} + \vec{t}
+$$
+
+A translation on the other hand is a class of affine transformation that takes on the form:
+
+$$
+	f(\vec{x}) = \vec{x} + \vec{t}
+$$
+
+Homogeneous coordinates allow affine transformations to be treated as linear transformations in a higher dimensional vector space.
+
+### Linear Algebra in Python
+To do linear algebra in Python we first need to import a package called Numpy.
+
+```python
+>>> import numpy as np
+
+>>> A = np.array([[0,-1],[1,0]])   # Create a 2x2 matrix
+>>> print(A)
+[[ 0 -1]
+ [ 1  0]]
+
+>>> x = np.array([1,2])            # Numpy uses row vectors
+>>> print(x)
+[1 2]
+
+
+>>> y = A @ x                      # Matrix-vector multiplication is denoted
+>>> print(y)  			           # with the @ operator
+[-2  1]
+
+>>> print(x.dot(y))                # Get the dot product of 2 vectors
+0
+
+>>> print(x + y)                   # Vector addition
+[-1  3]
+
+print(3 * x)                       # Scalar multiplication
+[3 6]
+
+>>> import numpy.linalg
+>>> B = np.linalg.inv(A)           # Get the inverse of a matrix
+>>> print(A @ B)
+[[1. 0.]
+ [0. 1.]]
+```
+
+### Solving Simultaneous Equations
+Let's suppose we have two linear equations with two unknowns that we wan't to solve
+
+$$
+	\begin{align*}
+		ax + by = e \\
+		cx + dy = f
+	\end{align*}
+$$
+
+We can actually represent this equation as a set of matrices and vectors
+
+$$
+	\begin{pmatrix}
+		a & b \\
+		c & d
+	\end{pmatrix}
+	\begin{pmatrix}
+		x \\
+		y
+	\end{pmatrix} = 
+	\begin{pmatrix}
+		e \\
+		f
+	\end{pmatrix}
+$$
+
+Now that the equation is in matrix form we can simply solve it by finding the inverse of the matrix
+$$
+	\begin{pmatrix}
+		x \\
+		y
+	\end{pmatrix} = 
+	\begin{pmatrix}
+		a & b \\
+		c & d
+	\end{pmatrix}^{-1}
+	\begin{pmatrix}
+		e \\
+		f
+	\end{pmatrix}
+$$
+
+We could also use Numpy to help use solve the simultaneous equations in matrix form. Let's suppose,
+
+$$
+	\begin{align*}
+		2x + 3y &= 5 \\
+		(1/3)x + 7y &= -13
+	\end{align*}
+$$
+
+We then put this equation into matrix form
+
+$$
+	\begin{pmatrix}
+		2 & 3 \\
+		1/3 & 7
+	\end{pmatrix}
+	\begin{pmatrix}
+		x \\
+		y
+	\end{pmatrix} = 
+	\begin{pmatrix}
+		5 \\
+		-13
+	\end{pmatrix}
+$$
+
+And now we can put this data into Python
+
+```python
+import numpy as np
+import numpy.linalg as la
+
+A = np.array(
+	[ 
+		[2, 3],
+		[1/3, 7] 
+	]
+)
+
+B = np.array([5, -13])
+
+solution = la.inv(A) @ B    # array([ 5.69230769, -2.12820513 ])
+```
+
+### 3D Graphics
+It's interesting to note how matrices and vectors are used when it comes to computing, especially with 3D graphics. 3D objects are usually modelled as a mesh of points where each point is represeted as a 3-dimensional vector. The pose, short for position and orientation, of the virtual camera is generally represented as an affine transformation where the translation part tells us where the camera is and the linear part tells us where the camera is looking. A projection can be used to render a 3D scene down to a 2D image. Finally homogeneous coordinates are usually used so that poses are valid linear transformations.
+
+### Robotics
+Robotics is also another place linear algebra is used frequently. 
+- The pose of the base of the robot is represented by an affine transformation
+- The pose of each joint, relative to the previous, is represented by an affine transformation
+- The composition of all transformations determines the pose of the manipulator
+- Homogeneous coordinates are used meaning everything is a linear transformation and we can use matrix multiplication
