@@ -2759,7 +2759,7 @@ $$
 Linear combination is the process of combining vector addition and scalar multiplications. Let's imagine we have $\{\vec{x_{1}},\ldots,\vec{x_{n}}\} \subseteq \mathbb{R}^n$ and $\{a_{1},\ldots,a_{n}\} \subseteq \mathbb{R}$. We can form a linear combination of the vectors such that:
 
 $$
-	\vec{y} = \sum_{j=1}^{n}a_{j}\vec{x}_{j} = a_{1}\vec{x_{1}} + \cdots + a_{n}\vec{x+{n}}
+	\vec{y} = \sum_{j=1}^{n}a_{j}\vec{x}_{j} = a_{1}\vec{x_{1}} + \cdots + a_{n}\vec{x_{n}}
 $$
 
 Where each number $a_j$ is called a weight or coefficient. Below is a practical example of this equation.
@@ -2768,7 +2768,7 @@ $$
 	\vec{x} =
 	\begin{pmatrix}
 		1 \\
-		7 \\
+		2 \\
 	\end{pmatrix} \ \ \
 	\vec{y} =
 	\begin{pmatrix}
