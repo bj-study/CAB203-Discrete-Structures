@@ -2464,10 +2464,10 @@ We call the Kleene star of a language $A$ as the set of all possible concatenati
 - $A^j := A^{j-1} \cdot A$
 - $A^* := A^0 \cup A^1 \cup A^2 \cup ...$
 
-The Kleene plus is similar to the Kleene start except we omit the empty string.
+The Kleene plus is similar to the Kleene star except we omit the empty string.
 
 $$
-	A^+ := A^0 \cup A^1 \cup A^2 \cup ... 
+	A^+ := A^1 \cup A^2 \cup A^3 \cup ... 
 $$
 
 ### Regular Languages
